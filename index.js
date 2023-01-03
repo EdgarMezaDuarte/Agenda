@@ -3,17 +3,17 @@ Autor: Edgar Meza Duarte
 Fecha: 12/12/2022*/
 const express = require("express");
 const mongoose = require("mongoose");
-const apiFilters = require('./src/Filters/api');
-const apiEdit = require('./src/Editar/api');
-const apiCreate = require('./src/Create/api');
-const apiDelete = require('./src/Eliminar/api');
+const apiFilters = require('./src/Routes/api');
+//const apiEdit = require('./src/Editar/api');
+//const apiCreate = require('./src/Create/api');
+//const apiDelete = require('./src/Eliminar/api');
 const app = express();
 const port = 3000;
 
 app.use(apiFilters);
-app.use(apiEdit);
-app.use(apiCreate);
-app.use(apiDelete);
+//app.use(apiEdit);
+//app.use(apiCreate);
+//app.use(apiDelete);
 app.get('', (req, res) =>{
     res.send("Api is working :D");
 });
