@@ -7,6 +7,7 @@ const usersController = require('../Controllers/usuarios');
 //Metodos get
 router.get("/Contactos", contactsController.listar);
 router.get("/Contactos/ConsultarId", contactsController.consultarId);
+router.get("/Contactos/Agenda", contactsController.listar);
 router.get("/Contactos/FilterName", contactsController.listName);
 router.get("/Contactos/FilterMail", contactsController.listMail);
 router.get("/Contactos/Delete",contactsController.delete);
@@ -18,5 +19,6 @@ router.post("/Contactos/Create", express.json() ,contactsController.create);
 /* acá empiezan Usuarios */
 
 router.post("/registro", express.json(),usersController.registro);
+router.post("/login", express.json(),usersController.login);
 
 module.exports=router;

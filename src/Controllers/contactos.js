@@ -1,15 +1,22 @@
 const { query } = require('express');
+const jwt = require('jsonwebtoken');
 const model = require('../Models/contacto');
 module.exports = {
     listar: (req, res) => {
-        //Aca se crea el filtro para encontrar a los usarios que tengan 1
-        model.find({Status: 1})
-            .then(data=>{
+        
+        const token = req.headers.authorization;
+        
+        //Con esta linea pretendemos deconstruir nuestro token
+        jwt.verify(token,'holamundo',(err,decoded) => {
+            console.log(decoded._id);
+            //Aca se crea el filtro para encontrar a los usarios que tengan 1
+            model.find({Status: 1, userId: decoded._id}).then(data=>{
                 res.send(data);
-            })
-            .catch(err =>{
+             }).catch(err =>{
                 res.status(400).send('Algo salio mal :(')
             });
+        });
+        
     },
     consultarId: (req, res) => {
         id= req.query.ID;
@@ -22,34 +29,48 @@ module.exports = {
             .catch(err =>{
                 res.status(400).send('Algo salio mal :( Xd')
             });
+        
+        
     },
     
     //Aca esta la respuesta para la pregunta 1a
     listName: (req, res) => {
         //Se hace mediante querys param
         nombre = req.query.Nombre;
+        const token = req.headers.authorization;
         
-        model.find({Nombre: nombre})
-            .then(data=>{
+        //Con esta linea pretendemos deconstruir nuestro token
+        jwt.verify(token,'holamundo',(err,decoded) => {
+            console.log(decoded._id);
+            //Se va a buscar que coinicidan el nombre el usuario al que pertenece
+            model.find({Nombre: nombre, userId: decoded._id}).then(data=>{
                 res.send(data);
-            })
-            .catch(err =>{
+            }).catch(err =>{
                 res.status(400).send('Algo salio mal :(')
             });
+        });
+
+
+        
     },
 
     //Aca esta la respuesta para la pregunta 1b
     listMail: (req, res) => {
         //Se hace mediante querys param
         mail = req.query.Mail;
-        
-        model.find({Correo: mail})
-            .then(data=>{
+        const token = req.headers.authorization;
+         //Con esta linea pretendemos deconstruir nuestro token
+         jwt.verify(token,'holamundo',(err,decoded) => {
+            console.log(decoded._id);
+            //Se va a buscar que coinicidan el nombre el usuario al que pertenece
+            model.find({Correo: mail, userId: decoded._id}).then(data=>{
                 res.send(data);
-            })
-            .catch(err =>{
-                res.status(400).send('Algo salio mal :(')
+            }).catch(err =>{
+                res.status(400).send('Algo salio mal :(');
             });
+        })
+
+       
     },
     
     //Editar contacto, aqui se responde la pregunta 8.4
@@ -61,8 +82,7 @@ module.exports = {
             Nombre: dataModificar.Nombre,
             Correo: dataModificar.Correo,
             Telefono: dataModificar.Telefono
-            })
-        .then(data=>{
+        }).then(data=>{
             res.send("El siguiente documento: \n"+data+"\nSe modifico exitosamente");
             
         })
@@ -76,11 +96,21 @@ module.exports = {
 
       //Aca esta la respuesta para la pregunta 3
     create: (req, res) => {
+        const token = req.headers.authorization;
         const data = req.body;
-        model.create(data)
-            .then(response =>{
+        //Con esta linea pretendemos deconstruir nuestro token
+        jwt.verify(token,'holamundo',(err,decoded) => {
+            console.log(decoded._id);
+            //Creamos un objeto con el que tengamos todo lo del qer body y el userId
+            const newBody2 = {
+                "userId": decoded._id,
+                ...data
+            } 
+            //Creamos el contacto
+            model.create(newBody2).then(response =>{
                 res.send(response);
             });
+        });
     },
 
     //Aca esta la respuesta para la pregunta 8.55

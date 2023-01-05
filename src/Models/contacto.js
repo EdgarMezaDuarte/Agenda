@@ -6,7 +6,8 @@ const contactoSchema = new Schema({
     Nombre: {type: String},
     Correo: {type: String},
     Telefono: {type: String},
-    Status: {type: Number, default: 1}
+    Status: {type: Number, default: 1},
+    userId:{type: String}
 });
 
 module.exports = model('agenda_contactos',contactoSchema);
