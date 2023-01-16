@@ -4,7 +4,6 @@ const model = require('../Models/contacto');
 module.exports = {
     listar: (req, res) => {
         const id= req.user._id;
-        console.log(id);
         //Aca se crea el filtro para encontrar a los usarios que tengan 1
         model.find({Status: 1, userId: id}).then(data=>{
             res.send(data);
@@ -93,9 +92,10 @@ module.exports = {
       //Aca esta la respuesta para la pregunta 3
     create: (req, res) => {
         const data = req.body;
-        
+        //Hago esto para que no importa lo que envie el usuario sioempre sera uno
+        data.Status = 1;
         data.userId = req.user._id;
-        
+        console.log(req.file);
         //Creamos el contacto
         model.create(data).then(response =>{
             res.send(response);
